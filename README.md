@@ -17,7 +17,7 @@ Make sure you have MongoDB installed in your local machine
 - Friends field
 
 ### Endpoints:
-- Create Vault: POST [localhost:4040/user/createvault](localhost:4040/user/createvault)
+- Create Vault: POST [localhost:4040/user/createvault](http://localhost:4040/user/createvault)
 ```json
 {
     "vault_name" : "ALL-IN",
@@ -26,7 +26,7 @@ Make sure you have MongoDB installed in your local machine
     "focus_mode" : false
 }
 ```
-- List of Vaults: GET [localhost:4040/user/vaults](localhost:4040/user/vaults)
+- List of Vaults: GET [localhost:4040/user/vaults](http://localhost:4040/user/vaults)
 
 # What is "All-in"
 Lets' say you need focus and try hard on one field to get best result and don't get overwhelmed.
