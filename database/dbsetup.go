@@ -32,6 +32,11 @@ func UserData(client *mongo.Client, collectionName string) *mongo.Collection {
 	return userCollection
 }
 
+func VaultData(client *mongo.Client, collectionName string) *mongo.Collection {
+	var vaultCollection = client.Database("all-in").Collection(collectionName)
+	return vaultCollection
+}
+
 func ToDoData(client *mongo.Client, collectionName string) *mongo.Collection {
 	var toDoCollection *mongo.Collection = client.Database("all-in").Collection(collectionName)
 	return toDoCollection

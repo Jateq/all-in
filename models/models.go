@@ -22,7 +22,7 @@ type Vault struct {
 	VaultName     *string            `json:"vault_name"`
 	Description   *string            `json:"description"`
 	CreatedAt     time.Time          `json:"created_at"`
-	Period        time.Time          `json:"period"`
+	Period        *int               `json:"period_days"`
 	StatusOverall bool               `json:"status_overall"`
 	FocusMode     bool               `json:"focus_mode"`
 	EachDay       []Day              `json:"each_day" bson:"each_day"`

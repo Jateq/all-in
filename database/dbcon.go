@@ -19,3 +19,5 @@ func DBInit() {
 	ToDoCollection.InsertOne(ctx, toDo)
 	defer cancel()
 }
+
+// just checking db connections
