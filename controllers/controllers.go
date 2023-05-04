@@ -35,10 +35,6 @@ func CreateToDo(c *fiber.Ctx) error {
 	return nil
 }
 
-//func DayToDos(c *fiber.Ctx) error {
-//ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-//var day models.Day
-//defer cancel()
-//refresh every day
-// think about proper link between day and todos
+//func CreateDay(c *fiber.Ctx){
 //}
+
