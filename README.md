@@ -2,7 +2,7 @@
 
 To be productive in every field.
 
-runs app at: [localhost:4040]((http://localhost:4040/))
+runs app at: [localhost:4040]((ttp://localhost:4040/)
 ```bash
 go run main.go
 ```
