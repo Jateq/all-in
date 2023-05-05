@@ -17,8 +17,29 @@ Make sure you have MongoDB installed in your local machine
 - Friends field
 
 ### Endpoints:
-- Create Vault: POST [localhost:4040/user/createvault](http://localhost:4040/user/createvault)
+- Sign up: POST [localhost:4040/user/signup](http://localhost:4040/user/signup)
 ```json
+{
+    "user_name": "Jateq",
+    "email": "temirlan.eraly@gmail.com",
+    "password": "123123"
+}
+```
+- Login: POST [localhost:4040/user/login](http://localhost:4040/user/login)
+
+```json
+{   
+    "email": "temirlan.eraly@gmail.com",
+    "password": "123123"
+}
+```
+
+
+
+- Create Vault: POST [localhost:4040/user/createvault](http://localhost:4040/user/createvault)
+
+### Vaults are not linked to user yet
+```json 
 {
     "vault_name" : "ALL-IN",
     "description" : "To be productive in every field",
