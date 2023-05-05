@@ -4,34 +4,15 @@ import (
 	"context"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"golang.org/x/crypto/bcrypt"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"os"
 	"time"
 )
 
 var SECRET_KEY = os.Getenv("SECRET_KEY")
-
-func HashPassword(password string) string {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 12)
-	if err != nil {
-		log.Panic(err)
-	}
-	return string(bytes)
-}
-
-func VerifyPassword(userPassword string, givenPassword string) (bool, string) {
-	err := bcrypt.CompareHashAndPassword([]byte(givenPassword), []byte(userPassword))
-	valid := true
-	msg := ""
-
-	if err != nil {
-		msg = "Login or password is incorrect"
-		valid = false
-	}
-	return valid, msg
-}
 
 func GenToken(email, user, uid string) (signedToken, signedRefreshToken string, err error) {
 	claims := &SignedDetails{
@@ -81,6 +62,26 @@ func ValidateToken(signedToken string) (*SignedDetails, error) {
 }
 
 func UpdateTokens(signedToken, signedRefreshToken, userid string) {
-	var ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	var ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
 	var updateObj primitive.D
+
+	updateObj = append(updateObj, bson.E{Key: "token", Value: signedToken})
+	updateObj = append(updateObj, bson.E{Key: "refresh_token", Value: signedRefreshToken})
+
+	upsert := true
+	filter := bson.M{"_id": userid}
+	opt := options.UpdateOptions{
+		Upsert: &upsert,
+	}
+
+	_, err := UserData.UpdateOne(ctx, filter, bson.D{{
+		Key: "$set", Value: updateObj},
+	},
+		&opt)
+
+	defer cancel()
+	if err != nil {
+		log.Panic(err)
+		return
+	}
 }
