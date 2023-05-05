@@ -82,13 +82,15 @@ func Login(c *fiber.Ctx) error {
 	if !passwordValid {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": msg})
 	}
+	userID := foundUser.UserID
 	userToken, refreshToken, err := token.GenToken(*foundUser.Email, *foundUser.Username, foundUser.ID.Hex())
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Can't generate token or refresh token"})
 	}
 	token.UpdateTokens(userToken, refreshToken, foundUser.ID.Hex())
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Hello! What is your focus for today?",
+		"message": "Hello! Use variables below to get access to endpoints",
+		"userID":  userID,
 		"token":   userToken,
 	})
 }

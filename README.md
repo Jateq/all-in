@@ -36,9 +36,11 @@ Make sure you have MongoDB installed in your local machine
 
 
 
-- Create Vault: POST [localhost:4040/user/createvault](http://localhost:4040/user/createvault)
+- Create Vault: POST [localhost:4040/user/addvault?id=](http://localhost:4040/user/addvault?id=)
 
-### Vaults are not linked to user yet
+
+
+### Vaults are LINKED to user by id!!!
 ```json 
 {
     "vault_name" : "ALL-IN",
@@ -47,6 +49,8 @@ Make sure you have MongoDB installed in your local machine
     "focus_mode" : false
 }
 ```
+## `your id= is userID string that can be found in MongoDB `
+When i (hopefully) work on frontend it will be automated !!!
 - List of Vaults: GET [localhost:4040/user/vaults](http://localhost:4040/user/vaults)
 
 # What is "All-in"
