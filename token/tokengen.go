@@ -32,16 +32,14 @@ func GenToken(email, user, uid string) (signedToken, signedRefreshToken string, 
 
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(SECRET_KEY))
 	if err != nil {
-		log.Panic(err)
-		return
+		return "", "", err
 	}
 	refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims).SignedString([]byte(SECRET_KEY))
 	if err != nil {
-		log.Panic(err)
-		return
+		return "", "", err
 	}
 
-	return token, refreshToken, err
+	return token, refreshToken, nil
 }
 
 func ValidateToken(signedToken string) (*SignedDetails, error) {

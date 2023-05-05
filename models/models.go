@@ -6,15 +6,14 @@ import (
 )
 
 type User struct {
-	ID           primitive.E `json:"_id" bson:"_id"`
-	Username     *string     `json:"user_name" validate:"required,min=2,max=30"`
-	Email        *string     `json:"email" validate:"email,required"`
-	Password     *string     `json:"password" validate:"required,min=6"`
-	Token        *string     `json:"token"`
-	RefreshToken *string     `json:"refresh_token"`
-	Vaults       []Vault     `json:"vaults" bson:"vaults"`
-	// think about how to add friends
-	// Friends []User ?????
+	ID           primitive.ObjectID `json:"_id" bson:"_id"`
+	Username     *string            `json:"user_name" validate:"required,min=2,max=30"`
+	Email        *string            `json:"email" validate:"email,required"`
+	Password     *string            `json:"password" validate:"required,min=6"`
+	Token        *string            `json:"token"`
+	RefreshToken *string            `json:"refresh_token"`
+	Vaults       []Vault            `json:"vaults" bson:"vaults"`
+	Friends      []User             `json:"friends" bson:"friends"`
 }
 
 type Vault struct {
