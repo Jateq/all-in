@@ -50,7 +50,7 @@ Make sure you have MongoDB installed in your local machine
 }
 ```
 ## `your id= is userID string that can be found in MongoDB `
-When i (hopefully) work on frontend it will be automated !!!
+When i will(hopefully) work on frontend it will be automated 
 - List of Vaults: GET [localhost:4040/user/vaults](http://localhost:4040/user/vaults)
 
 # What is "All-in"
