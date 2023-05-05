@@ -12,6 +12,7 @@ type User struct {
 	Password     *string            `json:"password" validate:"required,min=6"`
 	Token        *string            `json:"token"`
 	RefreshToken *string            `json:"refresh_token"`
+	UserID       string             `json:"user_id" bson:"user_id"` // to make search easier
 	Vaults       []Vault            `json:"vaults" bson:"vaults"`
 	Friends      []User             `json:"friends" bson:"friends"`
 }

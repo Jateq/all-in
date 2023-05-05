@@ -49,6 +49,7 @@ func SignUp(c *fiber.Ctx) error {
 	user.Password = &hashedPassword
 
 	user.ID = primitive.NewObjectID()
+	user.UserID = user.ID.Hex()
 	userToken, refreshToken, err := token.GenToken(*user.Email, *user.Username, user.ID.Hex())
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err})
@@ -149,11 +150,18 @@ func CreateVault(c *fiber.Ctx) error {
 }
 
 func Vaults(c *fiber.Ctx) error {
+	userID := c.Query("id")
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
+	var user models.User
+
+	err := UserCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&user)
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "can't find users vault by token"})
+	}
 
 	var vaults []models.Vault
-	cursor, err := VaultCollection.Find(ctx, bson.D{{}}) //again to return all the vaults
+	cursor, err := UserCollection.Find(ctx, bson.D{{Key: "vaults"}}) //again to return all the vaults
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "something went wrong, try later"})
 	}
@@ -162,9 +170,7 @@ func Vaults(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"error": "can't get vaults"})
 	}
 	defer cursor.Close(ctx)
-	// If you don't close the cursor explicitly using cursor.Close(ctx),
-	// it will remain open until the database connection is closed or garbage collected,
-	// which can lead to resource leaks and connection pool exhaustion.
+
 	if err = cursor.Err(); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "something went wrong"})
 	}
