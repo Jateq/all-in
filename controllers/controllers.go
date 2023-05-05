@@ -20,6 +20,7 @@ var VaultCollection *mongo.Collection = database.VaultData(database.Client, "Vau
 var UserCollection *mongo.Collection = database.UserData(database.Client, "UserCollection")
 
 var Validate = validator.New()
+var Header string
 
 func Welcome(c *fiber.Ctx) error {
 	return c.SendString("Welcome to ALL-IN")
@@ -60,7 +61,7 @@ func SignUp(c *fiber.Ctx) error {
 	if insertErr != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Something went wrong in registration"})
 	}
-	c.Set("token", userToken)
+
 	return c.Status(200).JSON(fiber.Map{"message": "Welcome to our community"})
 }
 
@@ -85,8 +86,10 @@ func Login(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Can't generate token or refresh token"})
 	}
 	token.UpdateTokens(userToken, refreshToken, foundUser.ID.Hex())
-	c.Response().Header.Add("token", userToken)
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Hello! What is your focus for today?"})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Hello! What is your focus for today?",
+		"token":   userToken,
+	})
 }
 
 func CreateToDo(c *fiber.Ctx) error {

@@ -8,9 +8,10 @@ import (
 )
 
 func Authentication(c *fiber.Ctx) error {
-	clientToken := c.Get("token")
+	clientToken := c.Get("Authorization")
+	//fmt.Println(clientToken)
 	if clientToken == "" {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "unable to authorize"})
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "unable to authorize, clientToken is empty"})
 	}
 	claims, err := token.ValidateToken(clientToken)
 	if err != nil {
