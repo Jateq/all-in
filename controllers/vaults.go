@@ -64,3 +64,19 @@ func AddVault(c *fiber.Ctx) error {
 		"Vault":   vault,
 	})
 }
+
+func Vaults(c *fiber.Ctx) error {
+	userID := c.Query("id")
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	var user models.User
+	err := UserCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&user)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "can't find user's vault by token"})
+	}
+
+	vaults := user.Vaults
+
+	return c.Status(200).JSON(vaults)
+}
