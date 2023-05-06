@@ -18,9 +18,9 @@ import (
 var ToDoCollection *mongo.Collection = database.ToDoData(database.Client, "ToDoCollection")
 var VaultCollection *mongo.Collection = database.VaultData(database.Client, "VaultCollection")
 var UserCollection *mongo.Collection = database.UserData(database.Client, "UserCollection")
+var FriendCollection = database.FriendsData(database.Client, "FriendsCollection")
 
 var Validate = validator.New()
-var Header string
 
 func Welcome(c *fiber.Ctx) error {
 	return c.SendString("Welcome to ALL-IN")
@@ -57,7 +57,6 @@ func SignUp(c *fiber.Ctx) error {
 	user.Token = &userToken
 	user.RefreshToken = &refreshToken
 	user.Vaults = make([]models.Vault, 0)
-	user.Friends = make([]models.User, 0)
 	_, insertErr := UserCollection.InsertOne(ctx, user)
 	if insertErr != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Something went wrong in registration"})
@@ -128,53 +127,3 @@ func CreateToDo(c *fiber.Ctx) error {
 //	return c.Status(200).JSON(fiber.Map{"message": "Vault is created!"})
 //
 //}
-
-func CreateVault(c *fiber.Ctx) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
-	defer cancel()
-
-	var vault models.Vault
-	if err := c.BodyParser(&vault); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "create a proper Vault"})
-	}
-
-	vault.VaultID = primitive.NewObjectID()
-	vault.CreatedAt = time.Now()
-	vault.StatusOverall = false
-	vault.EachDay = make([]models.Day, 0)
-
-	_, anyErr := VaultCollection.InsertOne(ctx, vault)
-	if anyErr != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "not inserted to MongoDB"})
-	}
-
-	return c.Status(200).JSON(fiber.Map{"message": "Vault is created!"})
-}
-
-func Vaults(c *fiber.Ctx) error {
-	userID := c.Query("id")
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
-	defer cancel()
-	var user models.User
-
-	err := UserCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&user)
-	if err != nil {
-		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "can't find users vault by token"})
-	}
-
-	var vaults []models.Vault
-	cursor, err := UserCollection.Find(ctx, bson.D{{Key: "vaults"}}) //again to return all the vaults
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "something went wrong, try later"})
-	}
-	err = cursor.All(ctx, &vaults)
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "can't get vaults"})
-	}
-	defer cursor.Close(ctx)
-
-	if err = cursor.Err(); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "something went wrong"})
-	}
-	return c.Status(200).JSON(vaults)
-}

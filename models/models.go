@@ -14,7 +14,12 @@ type User struct {
 	RefreshToken *string            `json:"refresh_token"`
 	UserID       string             `json:"user_id" bson:"user_id"` // to make search easier
 	Vaults       []Vault            `json:"vaults" bson:"vaults"`
-	Friends      []User             `json:"friends" bson:"friends"`
+}
+
+type Friends struct {
+	StructID primitive.ObjectID `json:"_id" bson:"_id"`
+	UserID   string             `json:"user_id" bson:"user_id" `
+	FriendID string             `json:"friend_id" bson:"friend_id"`
 }
 
 type Vault struct {
@@ -25,11 +30,11 @@ type Vault struct {
 	Period        *int               `json:"period_days"`
 	StatusOverall bool               `json:"status_overall"`
 	FocusMode     bool               `json:"focus_mode"`
-	EachDay       []Day              `json:"each_day" bson:"each_day"`
 }
 
-type Day struct {
+type Commits struct {
 	DayID          primitive.ObjectID `bson:"_id"`
+	DayNum         int                `json:"day_num"`
 	ToDos          []ToDo             `json:"to_dos" bson:"to_dos"`
 	EverythingDone bool               `json:"everything_done"`
 }

@@ -25,12 +25,11 @@ func AddVault(c *fiber.Ctx) error {
 	vault.VaultID = primitive.NewObjectID()
 	vault.CreatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 	vault.StatusOverall = false
-	vault.EachDay = make([]models.Day, 0)
 	if err = c.BodyParser(&vault); err != nil {
 		c.Status(fiber.StatusNotAcceptable).JSON(fiber.Map{"error": "create a proper vault structure"})
 	}
 
-	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	var ctx, cancel = context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	matchFilter := bson.D{{Key: "$match", Value: bson.D{primitive.E{Key: "_id", Value: userVaultBID}}}}
 	unwind := bson.D{{Key: "$unwind", Value: bson.D{primitive.E{Key: "path", Value: "$vaults"}}}}
@@ -49,7 +48,7 @@ func AddVault(c *fiber.Ctx) error {
 		count := num["count"]
 		size = count.(int32)
 	}
-	if size < 4 {
+	if size < 3 {
 		filter := bson.D{primitive.E{Key: "_id", Value: userVaultBID}}
 		update := bson.D{{Key: "$push", Value: bson.D{primitive.E{Key: "vaults", Value: vault}}}}
 		_, err := UserCollection.UpdateOne(ctx, filter, update)

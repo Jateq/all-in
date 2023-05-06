@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"github.com/Jateq/all-in/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
@@ -21,3 +22,17 @@ func DBInit() {
 }
 
 // just checking db connections
+
+func AddFriendMongo(friend models.Friends, friendCollection *mongo.Collection) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// Insert the friend
+	defer cancel()
+	_, err := friendCollection.InsertOne(ctx, friend)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
+}
