@@ -50,7 +50,7 @@ Make sure you have MongoDB installed in your local machine
     "focus_mode" : false
 }
 ```
-### -----------------`your id= is userID string that can be found in MongoDB `-----------------
+### -------------`your id= is userID string that can be found in MongoDB `-------------
 When i will(hopefully) work on frontend it will be automated. But for now:
 user_id
 "64554ba17ea3445a702f170b" It is gonna be unique always, so youn need to copy and paste this field.

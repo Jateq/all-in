@@ -15,6 +15,7 @@ func main() {
 	app.Use(middleware.Authentication)
 	app.Post("/user/addvault", controllers.AddVault)
 	app.Post("/user/addfriend", controllers.AddFriend)
+	app.Get("/user/friends", controllers.FriendList)
 	app.Get("/user/vaults", controllers.Vaults)
 	app.Post("/user/vault/addtodo", controllers.CreateToDo)
 	//app.Get("/user/vault/day", controllers.DayToDos)

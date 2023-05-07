@@ -28,3 +28,14 @@ func AddFriend(c *fiber.Ctx) error {
 	})
 
 }
+
+func FriendList(c *fiber.Ctx) error {
+	userID := c.Query("id")
+	friends, err := database.FindFriends(UserCollection, FriendCollection, userID)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "can't find your friends"})
+
+	}
+	return c.Status(200).JSON(friends)
+
+}
