@@ -77,13 +77,43 @@ user_id
     }
 ]
 ```
-- Add Friends POST: [localhost:4040/user/addfriend](http://localhost:4040/user/addfriend?id=)
+- Add Friends: POST [localhost:4040/user/addfriend?id=](http://localhost:4040/user/addfriend?id=)
 ```json
 {
     "friend_id" : "64554ba17ea3445a702f170b"
 }
 ```
 It will be stored in bridge type of table. Still an issue with unique tables.
+
+- List of Friends: GET [localhost:4040/user/friends?id=](http://localhost:4040/user/friends?id=)
+
+note that id query in query `?id=` is id of user, so you can find friends list by this id 
+
+-------------------------- that is how your output will look like --------------------------
+```json
+[
+    {
+        "_id": "6456294bf5c329dd498f2bc4",
+        "user_name": "damir",
+        "email": "damir@gmail.com",
+        "password": "$2a$12$eDApAw5GN6mHiWddsQqUh.GkbB/qGku6OIy6JTbxTlAjvRXfFR8lu",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImRhbWlyQGdtYWlsLmNvbSIsIlVzZXIiOiJkYW1pciIsIlVpZCI6IjY0NTYyOTRiZjVjMzI5ZGQ0OThmMmJjNCIsImV4cCI6MTY4MzQ1NDY2N30.os2J3MKs8PpM9_BaZjIcP8KH0iRjxgIKIXUc77vVGlo",
+        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6IiIsIlVzZXIiOiIiLCJVaWQiOiIiLCJleHAiOjE2ODM0NTQ2Njd9.EJajWf1FCWB6nAjoGYWAX5PH-2FBvTKk1tuac737OVw",
+        "user_id": "6456294bf5c329dd498f2bc4",
+        "vaults": []
+    },
+    {
+        "_id": "645622c34bc0ef0152bf6700",
+        "user_name": "Asylniet",
+        "email": "asylniet@gmail.com",
+        "password": "$2a$12$Pnd1.8/T6EEXqRJgoIwyAOMSj./cCroX6dLvpVCeea4vCJVzp7Xhq",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImFzeWxuaWV0QGdtYWlsLmNvbSIsIlVzZXIiOiJBc3lsbmlldCIsIlVpZCI6IjY0NTYyMmMzNGJjMGVmMDE1MmJmNjcwMCIsImV4cCI6MTY4MzQ1Mjk5NX0.4DN2ydS8DbVTtiSojQ9ZpajpAkM2xtcgKRwNiERcwKU",
+        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6IiIsIlVzZXIiOiIiLCJVaWQiOiIiLCJleHAiOjE2ODM0NTI5OTV9.Sj5b6ldwtSrF1eQvXzCgZBvT8r05KUCM_QqsfyPVbKg",
+        "user_id": "645622c34bc0ef0152bf6700",
+        "vaults": []
+    }
+]
+```
 # `What is "All-in"`
 Lets' say you need focus and try hard on one field to get best result and don't get overwhelmed.
 "All-in" helps you to keep track of your goal and share your focus with others.
