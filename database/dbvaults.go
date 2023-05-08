@@ -12,7 +12,7 @@ import (
 func LinkVaultCommit(commitsCollection, userCollection *mongo.Collection, userID, dayID string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	_, err :=
+
 }
 
 func LinkCommitTodos(todos []models.ToDo, commitsCollection *mongo.Collection) error {
