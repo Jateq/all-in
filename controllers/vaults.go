@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"github.com/Jateq/all-in/database"
 	"github.com/Jateq/all-in/models"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -79,4 +80,32 @@ func Vaults(c *fiber.Ctx) error {
 	vaults := user.Vaults
 
 	return c.Status(200).JSON(vaults)
+}
+
+func VaultToDos(c *fiber.Ctx) error {
+	userID := c.Query("id")
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+	var user models.User
+	err := UserCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&user)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "can't find user's vault by token"})
+	}
+
+	var toDos []models.ToDo
+
+	if err := c.BodyParser(&toDos); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "error with JSON input"})
+	}
+
+	for _, toDo := range toDos {
+		toDo.ToDoID = primitive.NewObjectID()
+		toDo.Finished = time.Time{}
+	}
+
+	if err = database.LinkCommitTodos(toDos, CommitsCollection); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "can't connect your todo plan"})
+	}
+
+	return c.Status(200).JSON(fiber.Map{"message": "ToDos created!"})
 }

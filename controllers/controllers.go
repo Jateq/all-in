@@ -19,6 +19,7 @@ var ToDoCollection *mongo.Collection = database.ToDoData(database.Client, "ToDoC
 var VaultCollection *mongo.Collection = database.VaultData(database.Client, "VaultCollection")
 var UserCollection *mongo.Collection = database.UserData(database.Client, "UserCollection")
 var FriendCollection = database.FriendsData(database.Client, "FriendsCollection")
+var CommitsCollection = database.CommitData(database.Client, "CommitsCollection")
 
 var Validate = validator.New()
 
@@ -92,22 +93,6 @@ func Login(c *fiber.Ctx) error {
 		"userID":  userID,
 		"token":   userToken,
 	})
-}
-
-func CreateToDo(c *fiber.Ctx) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
-	var toDo models.ToDo
-	defer cancel()
-	if err := c.BodyParser(&toDo); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "error with JSON input"})
-	}
-	toDo.ToDoID = primitive.NewObjectID()
-	toDo.Finished = time.Time{}
-	_, anyErr := ToDoCollection.InsertOne(ctx, toDo)
-	if anyErr != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "not inserted"})
-	}
-	return c.Status(200).JSON(fiber.Map{"message": "Vault is created!"})
 }
 
 //func CreateDay(c *fiber.Ctx) error {

@@ -26,32 +26,6 @@ func AddFriendMongo(friend models.Friends, friendCollection *mongo.Collection) e
 	return nil
 }
 
-func sliceFriends(friendCollection *mongo.Collection, userID string) ([]string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	var result []models.Friends
-
-	searchFromDB, err := friendCollection.Find(ctx, bson.D{primitive.E{Key: "user_id", Value: userID}})
-	if err != nil {
-		fmt.Println("can't find friends")
-		return nil, err
-	}
-	err = searchFromDB.All(ctx, &result)
-	if err != nil {
-		fmt.Println("can't assign to value")
-		return nil, err
-	}
-	var friendSlice []string
-
-	for _, tableFriend := range result {
-		friendSlice = append(friendSlice, tableFriend.FriendID)
-	}
-
-	//fmt.Println(friendSlice)
-	return friendSlice, nil
-
-}
-
 func FindFriends(userCollection, friendCollection *mongo.Collection, userID string) ([]models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -76,5 +50,31 @@ func FindFriends(userCollection, friendCollection *mongo.Collection, userID stri
 	}
 	//fmt.Println(friends)
 	return friends, nil
+
+}
+
+func sliceFriends(friendCollection *mongo.Collection, userID string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	var result []models.Friends
+
+	searchFromDB, err := friendCollection.Find(ctx, bson.D{primitive.E{Key: "user_id", Value: userID}})
+	if err != nil {
+		fmt.Println("can't find friends")
+		return nil, err
+	}
+	err = searchFromDB.All(ctx, &result)
+	if err != nil {
+		fmt.Println("can't assign to value")
+		return nil, err
+	}
+	var friendSlice []string
+
+	for _, tableFriend := range result {
+		friendSlice = append(friendSlice, tableFriend.FriendID)
+	}
+
+	//fmt.Println(friendSlice)
+	return friendSlice, nil
 
 }

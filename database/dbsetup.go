@@ -47,3 +47,8 @@ func ToDoData(client *mongo.Client, collectionName string) *mongo.Collection {
 	var toDoCollection *mongo.Collection = client.Database("all-in").Collection(collectionName)
 	return toDoCollection
 }
+
+func CommitData(client *mongo.Client, collectionName string) *mongo.Collection {
+	var commitsCollection = client.Database("all-in").Collection(collectionName)
+	return commitsCollection
+}
