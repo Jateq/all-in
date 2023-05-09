@@ -17,7 +17,7 @@ func main() {
 	app.Post("/user/addfriend", controllers.AddFriend)
 	app.Get("/user/friends", controllers.FriendList)
 	app.Get("/user/vaults", controllers.Vaults)
-	app.Post("/user/vault/addtodo", controllers.CreateToDo)
+	app.Post("/user/vault/:name", controllers.VaultToDos)
 	//app.Get("/user/vault/day", controllers.DayToDos)
 	log.Fatal(app.Listen(":4040"))
 

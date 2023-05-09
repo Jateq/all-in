@@ -84,6 +84,7 @@ func Vaults(c *fiber.Ctx) error {
 
 func VaultToDos(c *fiber.Ctx) error {
 	userID := c.Query("id")
+	vaultName := c.Params("name")
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 	var user models.User
@@ -101,11 +102,17 @@ func VaultToDos(c *fiber.Ctx) error {
 	for _, toDo := range toDos {
 		toDo.ToDoID = primitive.NewObjectID()
 		toDo.Finished = time.Time{}
+		toDo.Flag = false
 	}
 
 	if err = database.LinkCommitTodos(toDos, CommitsCollection); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "can't connect your todo plan"})
 	}
-
-	return c.Status(200).JSON(fiber.Map{"message": "ToDos created!"})
+	if err = database.LinkVaultCommit(CommitsCollection, UserCollection, userID, vaultName); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "bad request",
+			"more info": err})
+	}
+	return c.Status(200).JSON(fiber.Map{
+		"message": "To do plan created,",
+	})
 }

@@ -53,13 +53,13 @@ Make sure you have MongoDB installed in your local machine
 ### -------------`your id= is userID string that can be found in MongoDB `-------------
 When i will(hopefully) work on frontend it will be automated. But for now:
 user_id
-"64554ba17ea3445a702f170b" It is gonna be unique always, so youn need to copy and paste this field.
+"64554ba17ea3445a702f170b" It is gonna be unique always, so you need to copy and paste this field.
 - List of Vaults: GET [localhost:4040/user/vaults?id=64554ba17ea3445a702f170b](http://localhost:4040/user/vaults?id=64554ba17ea3445a702f170b)
 ```json
 [
     {
         "VaultID": "64554c6db4355335a107a9e9",
-        "vault_name": "ace gpa ",
+        "vault_name": "ace-gpa ",
         "description": "To be productive in every field",
         "created_at": "2023-05-05T18:35:25Z",
         "period_days": 20,
@@ -68,7 +68,7 @@ user_id
     },
     {
         "VaultID": "64554c8bb4355335a107a9ea",
-        "vault_name": "monk mode",
+        "vault_name": "monk-mode",
         "description": "To be productive in every field",
         "created_at": "2023-05-05T18:35:55Z",
         "period_days": 30,
@@ -114,6 +114,21 @@ note that id query in query `?id=` is id of user, so you can find friends list b
     }
 ]
 ```
+- Create To Do plan: POST: [localhost:4040/user/vault/ALL-IN?id=64554ba17ea3445a702f170b](http://localhost:4040/user/vault/ace-gpas?id=64554ba17ea3445a702f170b)
+```json
+[
+  {
+    "to_do_name": "Wake up at 7 am"
+  },
+  {
+    "to_do_name": "Run"
+  },
+  {
+    "to_do_name": "Prepare to nfac"
+  }
+]
+
+```
 # `What is "All-in"`
 Lets' say you need focus and try hard on one field to get best result and don't get overwhelmed.
 "All-in" helps you to keep track of your goal and share your focus with others.
@@ -135,3 +150,10 @@ Most important thing that i want to implement is friends and contribution calend
 
 ### Project is still in process! 
 Any help would be appreciated 
+
+So I'm left with:
+- refresh func for todo plan
+- return vault day plan by commitID, "day" in json
+- return user info
+- store commit infos for calendar
+- cookies?

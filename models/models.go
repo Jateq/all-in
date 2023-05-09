@@ -30,11 +30,12 @@ type Vault struct {
 	Period        *int               `json:"period_days"`
 	StatusOverall bool               `json:"status_overall"`
 	FocusMode     bool               `json:"focus_mode"`
-	Day           primitive.ObjectID `json:"day"`
+	DayPlan       string             `json:"day"`
 }
 
 type Commits struct {
 	DayID          primitive.ObjectID `bson:"_id"`
+	CommitID       string             `json:"commit_id" bson:"commit_id"`
 	DayNum         int                `json:"day_num"`
 	ToDos          []ToDo             `json:"to_dos" bson:"to_dos"`
 	EverythingDone bool               `json:"everything_done"`
