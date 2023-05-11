@@ -12,6 +12,7 @@ func main() {
 	app.Get("/", controllers.Welcome)
 	app.Post("/user/signup", controllers.SignUp)
 	app.Post("/user/login", controllers.Login)
+	app.Get("/user/profile", controllers.Profile)
 	app.Use(middleware.Authentication)
 	app.Post("/user/addvault", controllers.AddVault)
 	app.Post("/user/addfriend", controllers.AddFriend)

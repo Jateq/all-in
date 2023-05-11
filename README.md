@@ -11,10 +11,12 @@ Make sure you have MongoDB installed in your local machine
 - MongoDB
 - JWT authentication
 - Adding friends
+- User Profile
 
 ----- not implemented yet -----
-- User Profile 
+
 - Contribution calendar 
+- Update todos and refresh daily
 
 
 ### Endpoints:
@@ -114,7 +116,7 @@ note that id query in query `?id=` is id of user, so you can find friends list b
     }
 ]
 ```
-- Create To Do plan: POST: [localhost:4040/user/vault/ALL-IN?id=64554ba17ea3445a702f170b](http://localhost:4040/user/vault/ace-gpas?id=64554ba17ea3445a702f170b)
+- Create To Do plan: POST: [localhost:4040/user/vault/all-in?id=64554ba17ea3445a702f170b](http://localhost:4040/user/vault/all-in?id=64554ba17ea3445a702f170b)
 ```json
 [
   {
@@ -129,6 +131,42 @@ note that id query in query `?id=` is id of user, so you can find friends list b
 ]
 
 ```
+
+- Profile info: POST [localhost:4040/user/profile?id=64554ba17ea3445a702f170b](http://localhost:4040/user/profile?id=64554ba17ea3445a702f170b)
+```json
+{
+    "_id": "64554ba17ea3445a702f170b",
+    "user_name": "Jateq",
+    "email": "temirlan.eraly@gmail.com",
+    "password": "",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6InRlbWlybGFuLmVyYWx5QGdtYWlsLmNvbSIsIlVzZXIiOiJKYXRlcSIsIlVpZCI6IjY0NTU0YmExN2VhMzQ0NWE3MDJmMTcwYiIsImV4cCI6MTY4MzM5NzkyMX0.Kqsq_8A8p7DTcn_uiUd2ZD7dz_b3Phvc8RfIyGGB0fI",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6IiIsIlVzZXIiOiIiLCJVaWQiOiIiLCJleHAiOjE2ODMzOTc5MjF9.qKmVW30mI37asdBOZyk3udKyPUzh9pZRcAoiJnObdfU",
+    "user_id": "64554ba17ea3445a702f170b",
+    "vaults": [
+        {
+            "VaultID": "64554c6db4355335a107a9e9",
+            "vault_name": "ace gpa ",
+            "description": "To be productive in every field",
+            "created_at": "2023-05-05T18:35:25Z",
+            "period_days": 20,
+            "status_overall": false,
+            "focus_mode": false,
+            "day": ""
+        },
+        {
+            "VaultID": "64554c8bb4355335a107a9ea",
+            "vault_name": "monk mode",
+            "description": "To be productive in every field",
+            "created_at": "2023-05-05T18:35:55Z",
+            "period_days": 30,
+            "status_overall": false,
+            "focus_mode": false,
+            "day": ""
+        }
+    ]
+}
+```
+
 # `What is "All-in"`
 Lets' say you need focus and try hard on one field to get best result and don't get overwhelmed.
 "All-in" helps you to keep track of your goal and share your focus with others.

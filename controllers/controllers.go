@@ -95,20 +95,16 @@ func Login(c *fiber.Ctx) error {
 	})
 }
 
-//func CreateDay(c *fiber.Ctx) error {
-//	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
-//	var day models.Day
-//	defer cancel()
-//	if err := c.BodyParser(&day); err != nil {
-//		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "create a proper day plan"})
-//	}
-//	day.DayID = primitive.NewObjectID()
-//	day.ToDos = make([]models.ToDo, 0)
-//	day.EverythingDone = false
-//	_, anyErr := DayCollection.InsertOne(ctx, day)
-//	if anyErr != nil {
-//		return c.Status(500).JSON(fiber.Map{"error": "not inserted to MongoDB"})
-//	}
-//	return c.Status(200).JSON(fiber.Map{"message": "Vault is created!"})
-//
-//}
+func Profile(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	var user models.User
+	userID := c.Query("id")
+	if err := UserCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&user); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "can't find user with this id"})
+	}
+	*user.Password = ""
+
+	return c.Status(200).JSON(user)
+
+}
