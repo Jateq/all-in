@@ -46,6 +46,15 @@ func SignUp(c *fiber.Ctx) error {
 	if count > 0 {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "User with this email already exists"})
 	}
+
+	countName, err := UserCollection.CountDocuments(ctx, bson.M{"username": user.Username})
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Something went wrong with server, try later"})
+	}
+	if countName > 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "User with this username already exists"})
+	}
+
 	hashedPassword := middleware.HashPassword(*user.Password)
 	user.Password = &hashedPassword
 
@@ -93,6 +102,17 @@ func Login(c *fiber.Ctx) error {
 		"userID":  userID,
 		"token":   userToken,
 	})
+}
+
+func ProfileByUsername(c *fiber.Ctx) error {
+	userName := c.Params("username")
+	user, err := database.WorkWithUser(UserCollection, userName)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "can't find the user"})
+	}
+	*user.Password = ""
+
+	return c.Status(200).JSON(user)
 }
 
 func Profile(c *fiber.Ctx) error {
