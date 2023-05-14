@@ -13,6 +13,8 @@ func main() {
 	app.Post("/user/signup", controllers.SignUp)
 	app.Post("/user/login", controllers.Login)
 	app.Get("/user/profile", controllers.Profile)
+	app.Get("/:username", controllers.ProfileByUsername)
+	app.Get("/:username/:vaultname", controllers.VaultInfo)
 	app.Use(middleware.Authentication)
 	app.Post("/user/addvault", controllers.AddVault)
 	app.Post("/user/addfriend", controllers.AddFriend)

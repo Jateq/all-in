@@ -82,6 +82,18 @@ func Vaults(c *fiber.Ctx) error {
 	return c.Status(200).JSON(vaults)
 }
 
+func VaultInfo(c *fiber.Ctx) error {
+	userName := c.Params("username")
+	var vaultName string = c.Params("vaultname")
+
+	vault, err := database.FindVaultByVaultName(UserCollection, userName, vaultName)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "something went wrong"})
+	}
+
+	return c.Status(200).JSON(vault)
+}
+
 func VaultToDos(c *fiber.Ctx) error {
 	userID := c.Query("id")
 	vaultName := c.Params("name")
@@ -116,3 +128,9 @@ func VaultToDos(c *fiber.Ctx) error {
 		"message": "To do plan created,",
 	})
 }
+
+//func FinishTodo(c *fiber.Ctx) error {
+//	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+//	defer cancel()
+//	c.Query()
+//}
