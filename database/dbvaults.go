@@ -58,6 +58,8 @@ func LinkCommitTodos(todos []models.ToDo, commitsCollection *mongo.Collection) e
 	return nil
 }
 
+// still an error
+
 func FindVaultByVaultName(userCollection *mongo.Collection, userName, vaultName string) (models.Vault, error) {
 	filter := bson.M{"user_name": userName, "vaults.vaultname": vaultName}
 	projection := bson.M{"vaults.$": 1}
