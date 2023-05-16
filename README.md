@@ -116,7 +116,7 @@ note that id query in query `?id=` is id of user, so you can find friends list b
     }
 ]
 ```
-- Create To Do plan: POST: [localhost:4040/user/vault/all-in?id=64554ba17ea3445a702f170b](http://localhost:4040/user/vault/all-in?id=64554ba17ea3445a702f170b)
+- Create To Do plan: POST: [localhost:4040/user/all-in?id=64554ba17ea3445a702f170b](http://localhost:4040/user/all-in?id=64554ba17ea3445a702f170b)
 ```json
 [
   {

@@ -14,13 +14,15 @@ func main() {
 	app.Post("/user/login", controllers.Login)
 	app.Get("/user/profile", controllers.Profile)
 	app.Get("/:username", controllers.ProfileByUsername)
-	app.Get("/:username/:vaultname", controllers.VaultInfo)
+	//app.Get("/:username/:vaultname", controllers.VaultInfo)
 	app.Use(middleware.Authentication)
 	app.Post("/user/addvault", controllers.AddVault)
 	app.Post("/user/addfriend", controllers.AddFriend)
 	app.Get("/user/friends", controllers.FriendList)
 	app.Get("/user/vaults", controllers.Vaults)
-	app.Post("/user/vault/:name", controllers.VaultToDos)
+	app.Post("/user/:name", controllers.VaultToDos) // it creates todoplan
+	app.Get("/user/vault/:name", controllers.OneVault)
+	//app.Get("user/:name/plan", controllers.MyDay)
 	//app.Get("/user/vault/day", controllers.DayToDos)
 	log.Fatal(app.Listen(":4040"))
 

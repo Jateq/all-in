@@ -82,18 +82,6 @@ func Vaults(c *fiber.Ctx) error {
 	return c.Status(200).JSON(vaults)
 }
 
-func VaultInfo(c *fiber.Ctx) error {
-	userName := c.Params("username")
-	var vaultName string = c.Params("vaultname")
-
-	vault, err := database.FindVaultByVaultName(UserCollection, userName, vaultName)
-	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "something went wrong"})
-	}
-
-	return c.Status(200).JSON(vault)
-}
-
 func VaultToDos(c *fiber.Ctx) error {
 	userID := c.Query("id")
 	vaultName := c.Params("name")
@@ -127,6 +115,46 @@ func VaultToDos(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{
 		"message": "To do plan created,",
 	})
+}
+
+func OneVault(c *fiber.Ctx) error {
+	userID := c.Query("id")
+	vaultName := c.Params("name")
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	var user models.User
+	err := UserCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&user)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "can't find user's vault by token"})
+	}
+	var reqVault models.Vault
+	for _, reqVault = range user.Vaults {
+		if *reqVault.VaultName == vaultName {
+			return c.Status(200).JSON(reqVault)
+		}
+	}
+	return c.Status(400).JSON(fiber.Map{"error": "can't find such vault"})
+
+}
+
+//func MyDay(c *fiber.Ctx) error {
+//	userID := c.Query("id")
+//	vaultName:
+//	+c.Params("name")
+//}
+
+func VaultInfo(c *fiber.Ctx) error {
+	userName := c.Params("username")
+	var vaultName string = c.Params("vaultname")
+
+	vault, err := database.FindVaultByVaultName(UserCollection, userName, vaultName)
+	//fmt.Println(vault)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "something went wrong"})
+	}
+
+	return c.Status(200).JSON(vault)
 }
 
 //func FinishTodo(c *fiber.Ctx) error {
