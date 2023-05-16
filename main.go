@@ -22,8 +22,7 @@ func main() {
 	app.Get("/user/vaults", controllers.Vaults)
 	app.Post("/user/:name", controllers.VaultToDos) // it creates todoplan
 	app.Get("/user/vault/:name", controllers.OneVault)
-	//app.Get("user/:name/plan", controllers.MyDay)
-	//app.Get("/user/vault/day", controllers.DayToDos)
+	app.Get("user/:name/plan", controllers.MyDay)
 	log.Fatal(app.Listen(":4040"))
 
 }

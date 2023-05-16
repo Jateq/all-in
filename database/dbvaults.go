@@ -7,7 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
 )
 
@@ -60,29 +59,14 @@ func LinkCommitTodos(todos []models.ToDo, commitsCollection *mongo.Collection) e
 
 // still an error
 
-func FindVaultByVaultName(userCollection *mongo.Collection, userName, vaultName string) (models.Vault, error) {
-	filter := bson.M{"user_name": userName, "vaults.vaultname": vaultName}
-	projection := bson.M{"vaults.$": 1}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+func CommitOfSpecificVault(commitID string, commitsCollection *mongo.Collection) (models.Commits, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
-
-	opts := options.FindOne().SetProjection(projection)
-
-	var user models.User
-	err := userCollection.FindOne(ctx, filter, opts).Decode(&user)
+	var commit models.Commits
+	err := commitsCollection.FindOne(ctx, bson.M{"commit_id": commitID}).Decode(&commit)
+	fmt.Println("from dbvaults", commit, err)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return models.Vault{}, nil
-		}
-		return models.Vault{}, err
+		return models.Commits{}, err
 	}
-
-	vaults := user.Vaults
-	if len(vaults) > 0 {
-		return vaults[0], nil
-	}
-
-	// Vault not found
-	return models.Vault{}, nil
+	return commit, nil
 }

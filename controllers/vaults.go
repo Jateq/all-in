@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"github.com/Jateq/all-in/database"
 	"github.com/Jateq/all-in/models"
 	"github.com/gofiber/fiber/v2"
@@ -138,23 +139,30 @@ func OneVault(c *fiber.Ctx) error {
 
 }
 
-//func MyDay(c *fiber.Ctx) error {
-//	userID := c.Query("id")
-//	vaultName:
-//	+c.Params("name")
-//}
+func MyDay(c *fiber.Ctx) error {
+	userID := c.Query("id")
+	vaultName := c.Params("name")
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 
-func VaultInfo(c *fiber.Ctx) error {
-	userName := c.Params("username")
-	var vaultName string = c.Params("vaultname")
-
-	vault, err := database.FindVaultByVaultName(UserCollection, userName, vaultName)
-	//fmt.Println(vault)
+	var user models.User
+	err := UserCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&user)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "something went wrong"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "can't find user's vault by token"})
 	}
+	var reqVault models.Vault
+	for _, reqVault = range user.Vaults {
+		if *reqVault.VaultName == vaultName {
+			fmt.Println(reqVault.DayPlan, "vaults file")
+			myCommitForDay, err := database.CommitOfSpecificVault(reqVault.DayPlan, CommitsCollection)
+			if err != nil {
+				return c.Status(400).JSON(fiber.Map{"error": "can't find linked todo plan"})
+			}
+			return c.Status(200).JSON(myCommitForDay)
+		}
+	}
+	return c.Status(400).JSON(fiber.Map{"error": "can't find such vault"})
 
-	return c.Status(200).JSON(vault)
 }
 
 //func FinishTodo(c *fiber.Ctx) error {

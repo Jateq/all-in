@@ -132,6 +132,8 @@ note that id query in query `?id=` is id of user, so you can find friends list b
 
 ```
 
+- And there is rest of the endpoints like: get todos, get specific vault by name
+
 - Profile info: POST [localhost:4040/user/profile?id=64554ba17ea3445a702f170b](http://localhost:4040/user/profile?id=64554ba17ea3445a702f170b)
 ```json
 {
