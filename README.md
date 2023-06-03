@@ -53,7 +53,7 @@ Make sure you have MongoDB installed in your local machine
 }
 ```
 ### -------------`your id= is userID string that can be found in MongoDB `-------------
-When i will(hopefully) work on frontend it will be automated. But for now:
+
 user_id
 "64554ba17ea3445a702f170b" It is gonna be unique always, so you need to copy and paste this field.
 - List of Vaults: GET [localhost:4040/user/vaults?id=64554ba17ea3445a702f170b](http://localhost:4040/user/vaults?id=64554ba17ea3445a702f170b)
