@@ -64,7 +64,7 @@ func CommitOfSpecificVault(commitID string, commitsCollection *mongo.Collection)
 	defer cancel()
 	var commit models.Commits
 	err := commitsCollection.FindOne(ctx, bson.M{"commit_id": commitID}).Decode(&commit)
-	fmt.Println("from dbvaults", commit, err)
+	//fmt.Println("from dbvaults", commit, err)
 	if err != nil {
 		return models.Commits{}, err
 	}
