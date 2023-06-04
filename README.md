@@ -133,6 +133,46 @@ note that id query in query `?id=` is id of user, so you can find friends list b
 ```
 
 - And there is rest of the endpoints like: get todos, get specific vault by name
+- localhost:4040/korpe/plan?id=6456294bf5c329dd498f2bc4 both put and get, output of get:
+```json
+{
+  "DayID": "64638477aeeb40535ef0e83a",
+  "commit_id": "64638477aeeb40535ef0e83a",
+  "day_num": 0,
+  "to_dos": [
+    {
+      "ToDoID": "000000000000000000000000",
+      "to_do_name": "Wake up at 7 am",
+      "flag": false,
+      "finished": "0001-01-01T00:00:00Z"
+    },
+    {
+      "ToDoID": "000000000000000000000000",
+      "to_do_name": "Run",
+      "flag": true,
+      "finished": "2023-06-04T14:53:41.01Z"
+    },
+    {
+      "ToDoID": "000000000000000000000000",
+      "to_do_name": "Prepare to nfac",
+      "flag": false,
+      "finished": "0001-01-01T00:00:00Z"
+    }
+  ],
+  "everything_done": false
+} 
+```
+- is is for put:
+```json
+[
+  {
+    "to_do_name": "Run"
+  }
+]
+```
+
+
+```
 
 - Profile info: POST [localhost:4040/user/profile?id=64554ba17ea3445a702f170b](http://localhost:4040/user/profile?id=64554ba17ea3445a702f170b)
 ```json
@@ -192,8 +232,10 @@ Most important thing that i want to implement is friends and contribution calend
 Any help would be appreciated 
 
 So I'm left with:
-- refresh func for todo plan
+- refresh func for todo plan | finish controllers/vaults.go/204
 - return vault day plan by commitID, "day" in json
 - return user info
 - store commit infos for calendar
 - cookies?
+
+
