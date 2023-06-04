@@ -153,7 +153,7 @@ func MyDay(c *fiber.Ctx) error {
 	var reqVault models.Vault
 	for _, reqVault = range user.Vaults {
 		if *reqVault.VaultName == vaultName {
-			fmt.Println(reqVault.DayPlan, "vaults file")
+			//fmt.Println(reqVault.DayPlan, "vaults file")
 			myCommitForDay, err := database.CommitOfSpecificVault(reqVault.DayPlan, CommitsCollection)
 			if err != nil {
 				return c.Status(400).JSON(fiber.Map{"error": "can't find linked todo plan"})
@@ -162,6 +162,58 @@ func MyDay(c *fiber.Ctx) error {
 		}
 	}
 	return c.Status(400).JSON(fiber.Map{"error": "can't find such vault"})
+
+}
+
+func UpdateDay(c *fiber.Ctx) error {
+	userID := c.Query("id")
+	vaultName := c.Params("name")
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	var user models.User
+	err := UserCollection.FindOne(ctx, bson.M{"user_id": userID}).Decode(&user)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "can't find user's vault by token"})
+	}
+	var myCommitForDay models.Commits
+	var reqVault models.Vault
+	for _, reqVault = range user.Vaults {
+		if *reqVault.VaultName == vaultName {
+			//fmt.Println(reqVault.DayPlan, "vaults file")
+			myCommitForDay, err = database.CommitOfSpecificVault(reqVault.DayPlan, CommitsCollection)
+			if err != nil {
+				return c.Status(400).JSON(fiber.Map{"error": "can't find linked todo plan"})
+			}
+		}
+	}
+
+	var toDos []models.ToDo
+
+	if err := c.BodyParser(&toDos); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "error with JSON input"})
+	}
+
+	planForDay := myCommitForDay.ToDos // []models.ToDo
+	fmt.Println(toDos[0].ToDoName)
+
+	for i := 0; i < len(planForDay); i++ {
+		if planForDay[i].ToDoName == toDos[0].ToDoName {
+			planForDay[i].Flag = !planForDay[i].Flag
+			planForDay[i].Finished = time.Now()
+		}
+	}
+
+	update := bson.M{"$set": bson.M{"to_dos": planForDay}}
+	filter := bson.M{"_id": myCommitForDay.DayID}
+	_, err = CommitsCollection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to update commit"})
+	}
+
+	// CREATE HERE THE CHECK FUNCTION TO KEEP TRACK OF COMMITS
+
+	return c.Status(200).JSON(planForDay)
 
 }
 
